@@ -1,0 +1,237 @@
+import { Property } from '../types/property';
+
+import heroVilla from '../assets/images/hero_luxury_villa_algiers_1790261307079.jpg';
+import apartmentLiving from '../assets/images/property_luxury_apartment_living_1790261318498.jpg';
+import seaDuplex from '../assets/images/property_sea_view_duplex_1790261331073.jpg';
+import modernVillaPool from '../assets/images/property_modern_villa_pool_1790261343234.jpg';
+
+export const INITIAL_PROPERTIES: Property[] = [
+  {
+    id: 'prop-1',
+    title: 'Superbe Villa d\'Architecte avec Piscine à Débordement',
+    price: 185000000,
+    currency: 'DZD',
+    transactionType: 'sale',
+    propertyType: 'villa',
+    city: 'Alger',
+    district: 'Hydra - Val d\'Hydra',
+    area: 550,
+    bedrooms: 6,
+    bathrooms: 5,
+    totalFloors: 3,
+    description: 'Propriété d\'exception nichée sur les hauteurs de Val d\'Hydra. Édifiée sur un terrain arboré de 800 m², cette demeure contemporaine offre de vastes volumes baignés de lumière, un salon triple réception, une cuisine haut de gamme entièrement équipée, ainsi qu\'une suite parentale avec dressing sur mesure. Piscine à débordement avec vue dégagée, hammam traditionnel et garage sécurisé pour 4 véhicules. Acte notarié, livret foncier et certificat de conformité disponibles.',
+    images: [
+      heroVilla,
+      modernVillaPool,
+      apartmentLiving
+    ],
+    featured: true,
+    status: 'published',
+    lat: 36.7456,
+    lng: 3.0382,
+    instagramUrl: 'https://www.instagram.com/reel/C89abc12345/',
+    whatsappNumber: '+213550123456',
+    amenities: [
+      'Piscine à débordement',
+      'Vue panoramique',
+      'Hammam traditionnel',
+      'Garage 4 véhicules',
+      'Système domotique',
+      'Climatisation centrale VRV',
+      'Chauffage au sol',
+      'Bâche à eau & Groupe électrogène',
+      'Acte notarié & Livret foncier'
+    ],
+    viewsCount: 1420,
+    contactsCount: 48,
+    createdAt: '2026-03-10'
+  },
+  {
+    id: 'prop-2',
+    title: 'Appartement Haut Standing F4 avec Vue Dégagée',
+    price: 36000000,
+    currency: 'DZD',
+    transactionType: 'sale',
+    propertyType: 'appartement',
+    city: 'Alger',
+    district: 'Sidi Yahia - Hydra',
+    area: 165,
+    bedrooms: 3,
+    bathrooms: 2,
+    floor: 4,
+    totalFloors: 6,
+    description: 'Au cœur de Sidi Yahia, dans une résidence fermée et gardée 24h/24 avec deux ascenseurs, sublime appartement F4 traversant et très lumineux. Parquet en chêne massif, cuisine italienne équipée, suite parentale avec salle d\'eau privative, double vitrage thermique et acoustique.',
+    images: [
+      apartmentLiving,
+      seaDuplex,
+      heroVilla
+    ],
+    featured: true,
+    status: 'published',
+    lat: 36.7381,
+    lng: 3.0315,
+    instagramUrl: 'https://www.instagram.com/reel/C91xyz98765/',
+    whatsappNumber: '+213550123456',
+    amenities: [
+      'Résidence fermée avec gardiennage',
+      'Ascenseur sécurisé',
+      'Parking en sous-sol',
+      'Cuisine italienne équipée',
+      'Chauffage central individuel',
+      'Climatisation réversible',
+      'Double vitrage phonique'
+    ],
+    viewsCount: 2180,
+    contactsCount: 72,
+    createdAt: '2026-03-14'
+  },
+  {
+    id: 'prop-3',
+    title: 'Duplex Penthouse avec Terrasse Vue Mer Panoramique',
+    price: 250000,
+    currency: 'DZD',
+    transactionType: 'rent',
+    propertyType: 'duplex',
+    city: 'Oran',
+    district: 'Akid Lotfi - Front de Mer',
+    area: 280,
+    bedrooms: 4,
+    bathrooms: 3,
+    floor: 9,
+    totalFloors: 10,
+    description: 'Location d\'exception à Oran : duplex contemporain occupant les deux derniers étages d\'une tour moderne en front de mer. Terrasse plein sud de 60 m² offrant une vue spectaculaire sur la baie d\'Oran. Salon cathédrale, mobilier contemporain de designer et 4 chambres spacieuses.',
+    images: [
+      seaDuplex,
+      apartmentLiving,
+      modernVillaPool
+    ],
+    featured: true,
+    status: 'published',
+    lat: 35.7065,
+    lng: -0.6098,
+    instagramUrl: 'https://www.instagram.com/reel/C72mno45678/',
+    whatsappNumber: '+213550123456',
+    amenities: [
+      'Terrasse privative 60 m² vue mer',
+      'Mobilier contemporain haut de gamme',
+      'Accès privatif par ascenseur',
+      '2 box de stationnement fermés',
+      'Fibre optique haut débit',
+      'Climatisation intégrale'
+    ],
+    viewsCount: 980,
+    contactsCount: 34,
+    createdAt: '2026-03-18'
+  },
+  {
+    id: 'prop-4',
+    title: 'Villa Contemporaine avec Jardin Paysager & Jacuzzi',
+    price: 125000000,
+    currency: 'DZD',
+    transactionType: 'sale',
+    propertyType: 'villa',
+    city: 'Tipaza',
+    district: 'Chenoua - Plage',
+    area: 420,
+    bedrooms: 5,
+    bathrooms: 4,
+    totalFloors: 2,
+    description: 'Située dans le cadre enchanteur du mont Chenoua à quelques minutes de la plage, cette villa allie l\'architecture moderne aux matériaux nobles (pierre naturelle de Tipaza, bois exotique). Immense pièce à vivre ouverte sur une terrasse en teck avec jacuzzi extérieur 6 places, pelouse verdoyante et oliviers centenaires.',
+    images: [
+      modernVillaPool,
+      heroVilla,
+      seaDuplex
+    ],
+    featured: true,
+    status: 'published',
+    lat: 36.6025,
+    lng: 2.4178,
+    instagramUrl: 'https://www.instagram.com/reel/C81opq34567/',
+    whatsappNumber: '+213550123456',
+    amenities: [
+      'Jardin paysager avec arrosage automatique',
+      'Jacuzzi extérieur 6 places',
+      'À 5 min de la plage',
+      'Suite parentale avec terrasse',
+      'Logement pour gardien',
+      'Puits d\'eau douce avec filtration'
+    ],
+    viewsCount: 1650,
+    contactsCount: 51,
+    createdAt: '2026-03-20'
+  },
+  {
+    id: 'prop-5',
+    title: 'Appartement F3 Design Rénové au Cœur de Constantine',
+    price: 85000,
+    currency: 'DZD',
+    transactionType: 'rent',
+    propertyType: 'appartement',
+    city: 'Constantine',
+    district: 'Bellevue - Centre-Ville',
+    area: 110,
+    bedrooms: 2,
+    bathrooms: 1,
+    floor: 3,
+    totalFloors: 5,
+    description: 'Appartement F3 entièrement rénové par un architecte d\'intérieur dans un bel immeuble haussmannien préservé. Moulures d\'origine restaurées, cuisine moderne avec électroménager neuf, salle d\'eau avec douche à l\'italienne.',
+    images: [
+      apartmentLiving,
+      heroVilla,
+      seaDuplex
+    ],
+    featured: false,
+    status: 'published',
+    lat: 36.3650,
+    lng: 6.6147,
+    instagramUrl: 'https://www.instagram.com/reel/C65rst78901/',
+    whatsappNumber: '+213550123456',
+    amenities: [
+      'Entièrement meublé et équipé',
+      'Immeuble haussmannien de charme',
+      'Chauffage central individuel',
+      'Double vitrage phonique',
+      'Interphone vidéo'
+    ],
+    viewsCount: 740,
+    contactsCount: 22,
+    createdAt: '2026-03-22'
+  },
+  {
+    id: 'prop-6',
+    title: 'Villa Coloniale Rénovée avec Vue Mer & Pinède',
+    price: 140000000,
+    currency: 'DZD',
+    transactionType: 'sale',
+    propertyType: 'villa',
+    city: 'Béjaïa',
+    district: 'Cap Carbon - Les Crêtes',
+    area: 380,
+    bedrooms: 5,
+    bathrooms: 3,
+    totalFloors: 2,
+    description: 'Emplacement rare sur les hauteurs de Béjaïa avec vue plongeante sur le golfe des Bougies. Propriété de caractère avec hauts plafonds, cheminée fonctionnelle en marbre, grande terrasse en pierre et jardin arboré sans vis-à-vis.',
+    images: [
+      heroVilla,
+      modernVillaPool,
+      seaDuplex
+    ],
+    featured: false,
+    status: 'published',
+    lat: 36.7511,
+    lng: 5.0843,
+    instagramUrl: 'https://www.instagram.com/reel/C54uvw12345/',
+    whatsappNumber: '+213550123456',
+    amenities: [
+      'Vue mer imprenable à 180°',
+      'Terrain arboré de 1200 m²',
+      'Cheminée d\'époque',
+      'Garage double',
+      'Citerne d\'eau 15 000 L',
+      'Acte notarié & Livret foncier'
+    ],
+    viewsCount: 890,
+    contactsCount: 29,
+    createdAt: '2026-03-23'
+  }
+];

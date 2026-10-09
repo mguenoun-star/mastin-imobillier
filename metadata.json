@@ -1,0 +1,6 @@
+{
+  "name": "Mastin immobilier",
+  "description": "Plateforme immobilière d'excellence pour l'achat, la vente et la location de biens d'exception en Algérie.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
