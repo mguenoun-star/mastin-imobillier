@@ -80,10 +80,10 @@ export const DashboardPage: React.FC = () => {
     updateProperty(prop.id, { status: nextStatus });
   };
 
-  const handleConfirmDelete = () => {
+  const handleConfirmDelete = async () => {
     if (propertyToDelete) {
-      deleteProperty(propertyToDelete.id);
-      setPropertyToDelete(null);
+      const { error } = await deleteProperty(propertyToDelete.id);
+      if (!error) setPropertyToDelete(null);
     }
   };
 

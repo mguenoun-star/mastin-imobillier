@@ -65,12 +65,12 @@ export const Header: React.FC = () => {
           </button>
 
           {/* ZONE 2: 4-6 CLEAN TEXT NAVIGATION LINKS */}
-          <nav className={`hidden xl:flex items-center gap-5 text-xs font-medium ${darkMode ? 'text-slate-300' : 'text-slate-600'}`}>
+          <nav className={`hidden xl:flex items-center gap-6 text-sm font-medium ${darkMode ? 'text-slate-300' : 'text-slate-600'}`}>
             <button
               onClick={() => handleNav('home')}
-              className={`transition-colors py-1 relative ${
+              className={`nav-link-animated transition-colors py-2 font-semibold ${
                 view === 'home'
-                  ? 'text-rose-600 font-semibold after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-rose-600'
+                  ? 'text-rose-600 active'
                   : 'hover:text-slate-900'
               }`}
             >
@@ -79,9 +79,9 @@ export const Header: React.FC = () => {
 
             <button
               onClick={() => handleNav('search')}
-              className={`transition-colors py-1 relative ${
+              className={`nav-link-animated transition-colors py-2 font-semibold ${
                 view === 'search'
-                  ? 'text-rose-600 font-semibold after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-rose-600'
+                  ? 'text-rose-600 active'
                   : 'hover:text-slate-900'
               }`}
             >
@@ -92,16 +92,16 @@ export const Header: React.FC = () => {
               <>
                 <button
                   onClick={() => handleNav('about')}
-                  className={`transition-colors py-1 relative ${view === 'about' ? 'text-rose-600 font-semibold after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-rose-600' : 'hover:text-slate-900'}`}
+                  className={`nav-link-animated transition-colors py-2 font-semibold ${view === 'about' ? 'text-rose-600 active' : 'hover:text-slate-900'}`}
                 >
                   À propos
                 </button>
 
                 <button
                   onClick={() => handleNav('contact')}
-                  className="button-motion inline-flex items-center rounded-lg bg-emerald-600 px-4 py-2 text-white hover:bg-emerald-500 shadow-md shadow-emerald-950/20"
+                  className="button-motion cta-pulse inline-flex items-center rounded-xl bg-emerald-600 px-5 py-2.5 text-sm font-bold text-white hover:bg-emerald-500 shadow-lg shadow-emerald-950/30"
                 >
-                  Contactez-nous
+                  ✨ Contactez-nous
                 </button>
               </>
             )}
@@ -111,9 +111,9 @@ export const Header: React.FC = () => {
               <>
                 <button
                   onClick={() => handleNav('dashboard')}
-                  className={`transition-colors py-1 relative inline-flex items-center gap-1.5 ${
+                  className={`nav-link-animated transition-colors py-2 inline-flex items-center gap-1.5 font-semibold ${
                     view === 'dashboard'
-                      ? 'text-rose-600 font-semibold after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-rose-600'
+                      ? 'text-rose-600 active'
                       : 'hover:text-slate-900'
                   }`}
                 >
@@ -123,9 +123,9 @@ export const Header: React.FC = () => {
 
                 <button
                   onClick={() => handleNav('add')}
-                  className={`transition-colors py-1 relative inline-flex items-center gap-1.5 ${
+                  className={`nav-link-animated transition-colors py-2 inline-flex items-center gap-1.5 font-semibold ${
                     view === 'add'
-                      ? 'text-rose-600 font-semibold after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-rose-600'
+                      ? 'text-rose-600 active'
                       : 'hover:text-slate-900'
                   }`}
                 >

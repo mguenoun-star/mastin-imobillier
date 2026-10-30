@@ -15,7 +15,7 @@ export interface AppContextType {
   navigateTo: (view: AppView, options?: { propertyId?: string; editId?: string }) => void;
   setView: (view: AppView, propertyId?: string) => void;
   addProperty: (property: Omit<Property, 'id' | 'createdAt' | 'viewsCount' | 'contactsCount'>) => Promise<{ id: string | null; error: string | null }>;
-  updateProperty: (id: string, property: Partial<Property>) => Promise<{ error: string | null }>; deleteProperty: (id: string) => void;
+  updateProperty: (id: string, property: Partial<Property>) => Promise<{ error: string | null }>; deleteProperty: (id: string) => Promise<{ error: string | null }>;
   togglePropertyStatus: (id: string) => void; toggleFavorite: (propertyId: string) => void;
   isFavorite: (propertyId: string) => boolean; incrementViews: (propertyId: string) => void;
   incrementContacts: (propertyId: string) => void; loginWithGoogle: (role: UserRole) => void; logout: () => void;
@@ -62,7 +62,16 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     if (error) { showToast(error.message, 'error'); return; }
     setProperties((data ?? []).map((row) => toAppProperty(row as Record<string, any>)));
   }, []);
-  useEffect(() => { void fetchProperties(); }, [fetchProperties]);
+  useEffect(() => {
+    void fetchProperties();
+    // Realtime keeps view counts and listing changes in step across visitors.
+    const channel = supabase.channel('properties-live-updates')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'properties' }, () => { void fetchProperties(); })
+      .subscribe();
+    // Keep a fallback for projects where the properties table is not enabled for Realtime.
+    const refreshTimer = window.setInterval(() => { void fetchProperties(); }, 10000);
+    return () => { window.clearInterval(refreshTimer); void supabase.removeChannel(channel); };
+  }, [fetchProperties]);
   useEffect(() => {
     if (!auth.user) { setFavorites([]); return; }
     supabase.from('favorites').select('property_id').eq('user_id', auth.user.id).then(({ data }) => setFavorites((data ?? []).map(row => row.property_id)));
@@ -90,7 +99,21 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     if (!error) await fetchProperties();
     return { error: error?.message ?? null };
   };
-  const deleteProperty = (id: string) => { void supabase.from('properties').delete().eq('id', id).then(({ error }) => error ? showToast(error.message, 'error') : void fetchProperties()); };
+  const deleteProperty = async (id: string) => {
+    const { data, error } = await supabase.from('properties').delete().eq('id', id).select('id');
+    if (error) {
+      showToast(`Impossible de supprimer cette annonce : ${error.message}`, 'error');
+      return { error: error.message };
+    }
+    if (!data?.length) {
+      const message = "La suppression n'a pas été effectuée. Vérifiez vos droits d'administrateur.";
+      showToast(message, 'error');
+      return { error: message };
+    }
+    setProperties(prev => prev.filter(property => property.id !== id));
+    showToast('Annonce supprimée.', 'success');
+    return { error: null };
+  };
   const togglePropertyStatus = (id: string) => { const property = properties.find(p => p.id === id); if (property) updateProperty(id, { status: property.status === 'published' ? 'draft' : 'published' }); };
   const toggleFavorite = (id: string) => {
     if (!auth.user) { showToast('Connectez-vous pour enregistrer vos favoris.', 'info'); navigateTo('login'); return; }
@@ -102,7 +125,13 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     const item = properties.find(p => p.id === id); if (!item) return;
     const next = (field === 'views_count' ? item.viewsCount : item.contactsCount) + 1;
     setProperties(prev => prev.map(p => p.id === id ? { ...p, [field === 'views_count' ? 'viewsCount' : 'contactsCount']: next } : p));
-    void supabase.rpc('increment_property_counter', { property_id: id, counter_name: field });
+    void supabase.rpc('increment_property_counter', { property_id: id, counter_name: field })
+      .then(({ error }) => {
+        if (error) {
+          showToast(`Impossible d'enregistrer la vue : ${error.message}`, 'error');
+          void fetchProperties();
+        }
+      });
   };
   const currentProperty = properties.find(p => p.id === selectedPropertyId) ?? properties[0] ?? null;
   const ignored = () => showToast('La connexion Google n’est pas configurée. Utilisez votre adresse e-mail.', 'info');
