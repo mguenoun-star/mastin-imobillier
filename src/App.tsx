@@ -21,8 +21,27 @@ import { ContactPage } from './pages/ContactPage';
 import { AuthProvider } from './context/authContext';
 import { isSupabaseConfigured } from './lib/supabaseClient';
 
+const PAGE_TITLES: Record<string, string> = {
+  home: 'Accueil',
+  search: 'Rechercher un bien',
+  about: 'À propos',
+  contact: 'Contact',
+  detail: 'Détail du bien',
+  add: 'Publier une annonce',
+  edit: 'Modifier l\'annonce',
+  dashboard: 'Tableau de bord',
+  login: 'Connexion',
+  profile: 'Mon profil',
+};
+
 const AppContent: React.FC = () => {
   const { view, selectedPropertyId, language } = useApp();
+
+  // Dynamically update the browser tab title on each page navigation
+  React.useEffect(() => {
+    const pageTitle = PAGE_TITLES[view] || 'Accueil';
+    document.title = `${pageTitle} | Mastin Immobilier`;
+  }, [view]);
 
   const renderCurrentView = () => {
     switch (view) {
