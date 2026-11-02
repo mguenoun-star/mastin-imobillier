@@ -51,9 +51,9 @@ export const AboutPage: React.FC = () => {
               <button onClick={() => setView('search')} className="button-motion inline-flex items-center justify-center gap-2 rounded-xl bg-emerald-600 px-6 py-3.5 text-sm font-semibold text-white shadow-lg shadow-emerald-900/20 hover:bg-emerald-500">
                 Découvrir nos biens <ArrowRight className="h-4 w-4" />
               </button>
-              <a href="#notre-approche" className="button-motion inline-flex items-center justify-center gap-2 rounded-xl border border-slate-300 px-6 py-3.5 text-sm font-semibold text-slate-700 hover:border-emerald-500 hover:text-emerald-600">
+              <button onClick={() => document.getElementById('notre-approche')?.scrollIntoView({ behavior: 'smooth' })} className="button-motion inline-flex items-center justify-center gap-2 rounded-xl border border-slate-300 px-6 py-3.5 text-sm font-semibold text-slate-700 hover:border-emerald-500 hover:text-emerald-600">
                 Notre approche <ArrowDown className="h-4 w-4" />
-              </a>
+              </button>
             </div>
             <div className="mt-10 flex flex-wrap gap-x-8 gap-y-4 border-t border-slate-200 pt-6">
               <div><p className="font-serif text-3xl font-bold text-slate-900">+180</p><p className="mt-1 text-xs text-slate-500">biens à découvrir</p></div>

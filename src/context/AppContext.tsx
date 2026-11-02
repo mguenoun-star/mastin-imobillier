@@ -39,12 +39,20 @@ const toAppProperty = (row: Record<string, any>): Property => ({
   createdAt: row.created_at ?? row.createdAt ?? new Date().toISOString(),
   viewsCount: Number(row.views_count ?? row.viewsCount ?? 0),
   contactsCount: Number(row.contacts_count ?? row.contactsCount ?? 0),
-});
+}) as Property;
+
+const LOCAL_FAVORITES_KEY = 'mastin_favorites';
+const readLocalFavorites = (): string[] => {
+  try { return JSON.parse(localStorage.getItem(LOCAL_FAVORITES_KEY) || '[]'); } catch { return []; }
+};
+const writeLocalFavorites = (ids: string[]) => {
+  localStorage.setItem(LOCAL_FAVORITES_KEY, JSON.stringify(ids));
+};
 
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const auth = useAuth();
   const [properties, setProperties] = useState<Property[]>([]);
-  const [favorites, setFavorites] = useState<string[]>([]);
+  const [favorites, setFavorites] = useState<string[]>(readLocalFavorites);
   const [currentView, setCurrentView] = useState<AppView>('home');
   const [selectedPropertyId, setSelectedPropertyId] = useState<string | null>(null);
   const [editPropertyId, setEditPropertyId] = useState<string | null>(null);
@@ -73,8 +81,28 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     return () => { window.clearInterval(refreshTimer); void supabase.removeChannel(channel); };
   }, [fetchProperties]);
   useEffect(() => {
-    if (!auth.user) { setFavorites([]); return; }
-    supabase.from('favorites').select('property_id').eq('user_id', auth.user.id).then(({ data }) => setFavorites((data ?? []).map(row => row.property_id)));
+    if (!auth.user) {
+      // Restore guest favorites from localStorage
+      setFavorites(readLocalFavorites());
+      return;
+    }
+    // User logged in: load from Supabase + merge any guest favorites from localStorage
+    const localFavs = readLocalFavorites();
+    supabase.from('favorites').select('property_id').eq('user_id', auth.user.id).then(async ({ data }) => {
+      const remoteFavs = (data ?? []).map(row => row.property_id);
+      // Merge local favorites that are not yet in Supabase
+      const toSync = localFavs.filter(id => !remoteFavs.includes(id));
+      if (toSync.length > 0) {
+        await supabase.from('favorites').upsert(
+          toSync.map(id => ({ user_id: auth.user!.id, property_id: id })),
+          { onConflict: 'user_id,property_id' }
+        );
+      }
+      const merged = [...new Set([...remoteFavs, ...toSync])];
+      setFavorites(merged);
+      // Clear localStorage since they are now saved in Supabase
+      writeLocalFavorites([]);
+    });
   }, [auth.user?.id]);
 
   const navigateTo = (view: AppView, options?: { propertyId?: string; editId?: string }) => {
@@ -116,8 +144,16 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   };
   const togglePropertyStatus = (id: string) => { const property = properties.find(p => p.id === id); if (property) updateProperty(id, { status: property.status === 'published' ? 'draft' : 'published' }); };
   const toggleFavorite = (id: string) => {
-    if (!auth.user) { showToast('Connectez-vous pour enregistrer vos favoris.', 'info'); navigateTo('login'); return; }
     const exists = favorites.includes(id);
+    if (!auth.user) {
+      // Guest mode: save to localStorage
+      const updated = exists ? favorites.filter(x => x !== id) : [...favorites, id];
+      setFavorites(updated);
+      writeLocalFavorites(updated);
+      showToast(exists ? 'Retiré des favoris.' : 'Ajouté aux favoris !', 'success');
+      return;
+    }
+    // Logged-in mode: save to Supabase
     const request = exists ? supabase.from('favorites').delete().eq('user_id', auth.user.id).eq('property_id', id) : supabase.from('favorites').insert({ user_id: auth.user.id, property_id: id });
     void request.then(({ error }) => { if (error) showToast(error.message, 'error'); else setFavorites(prev => exists ? prev.filter(x => x !== id) : [...prev, id]); });
   };
